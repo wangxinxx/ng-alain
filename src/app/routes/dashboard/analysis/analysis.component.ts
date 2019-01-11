@@ -8,8 +8,8 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { STColumn } from '@delon/abc';
 import { getTimeDistance } from '@delon/util';
 import { _HttpClient } from '@delon/theme';
-import { I18NService } from '@core/i18n/i18n.service';
-import { yuan } from '@shared/utils';
+import { I18NService } from '@core';
+import { yuan } from '@shared';
 
 @Component({
   selector: 'app-dashboard-analysis',
@@ -102,6 +102,22 @@ export class DashboardAnalysisComponent implements OnInit {
     return yuan(value);
   }
 
-  _activeTab = 0;
-  _tabChange(value: any) {}
+  saleTabs: any[] = [
+    { key: 'sales', show: true },
+    { key: 'visits' },
+  ];
+  salesChange(idx: number) {
+    if (this.saleTabs[idx].show !== true) {
+      this.saleTabs[idx].show = true;
+      this.cdr.detectChanges();
+    }
+  }
+
+  offlineIdx = 0;
+  offlineChange(idx: number) {
+    if (this.data.offlineData[idx].show !== true) {
+      this.data.offlineData[idx].show = true;
+      this.cdr.detectChanges();
+    }
+  }
 }

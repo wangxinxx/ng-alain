@@ -1,11 +1,12 @@
 import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpErrorResponse, HttpResponse, HttpEvent, HttpResponseBase } from '@angular/common/http';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpErrorResponse, HttpEvent, HttpResponseBase } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { mergeMap, catchError } from 'rxjs/operators';
 import { NzMessageService, NzNotificationService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 import { environment } from '@env/environment';
+import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
 
 const CODEMESSAGE = {
   200: '服务器成功返回请求的数据。',
@@ -81,7 +82,8 @@ export class DefaultInterceptor implements HttpInterceptor {
         break;
       case 401: // 未登录状态码
         // 请求错误 401: https://preview.pro.ant.design/api/401 用户没有权限（令牌、用户名、密码错误）。
-        this.goTo('/passport/login?clean=token');
+        (this.injector.get(DA_SERVICE_TOKEN) as ITokenService).clear();
+        this.goTo('/passport/login');
         break;
       case 403:
       case 404:
@@ -91,7 +93,7 @@ export class DefaultInterceptor implements HttpInterceptor {
       default:
         if (ev instanceof HttpErrorResponse) {
           console.warn('未可知错误，大部分是由于后端不支持CORS或无效配置引起', ev);
-          this.msg.error(ev.message);
+          return throwError(ev);
         }
         break;
     }
