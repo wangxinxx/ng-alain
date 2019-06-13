@@ -11,9 +11,7 @@ import { AlainThemeModule } from '@delon/theme';
 import { DelonMockModule } from '@delon/mock';
 import * as MOCKDATA from '../../_mock';
 import { environment } from '@env/environment';
-const MOCK_MODULES = !environment.production
-  ? [DelonMockModule.forRoot({ data: MOCKDATA })]
-  : [];
+const MOCK_MODULES = !environment.production ? [DelonMockModule.forRoot({ data: MOCKDATA })] : [];
 // #endregion
 
 // #region reuse-tab
@@ -45,7 +43,7 @@ import { PageHeaderConfig } from '@delon/abc';
 export function fnPageHeaderConfig(): PageHeaderConfig {
   return {
     ...new PageHeaderConfig(),
-    ...{ homeI18n: 'home' } as PageHeaderConfig
+    homeI18n: 'home',
   };
 }
 
@@ -53,17 +51,16 @@ import { DelonAuthConfig } from '@delon/auth';
 export function fnDelonAuthConfig(): DelonAuthConfig {
   return {
     ...new DelonAuthConfig(),
-    ...{ login_url: '/passport/login' } as DelonAuthConfig
+    login_url: '/passport/login',
   };
 }
 
+// tslint:disable-next-line: no-duplicate-imports
 import { STConfig } from '@delon/abc';
 export function fnSTConfig(): STConfig {
   return {
     ...new STConfig(),
-    ...{
-      modal: { size: 'lg' }
-    } as STConfig
+    modal: { size: 'lg' },
   };
 }
 
@@ -77,10 +74,7 @@ const GLOBAL_CONFIG_PROVIDES = [
 // #endregion
 
 @NgModule({
-  imports: [
-    AlainThemeModule.forRoot(),
-    ...MOCK_MODULES,
-  ],
+  imports: [AlainThemeModule.forRoot(), ...MOCK_MODULES],
 })
 export class DelonModule {
   constructor(@Optional() @SkipSelf() parentModule: DelonModule) {

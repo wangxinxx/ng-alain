@@ -62,7 +62,7 @@ const LANGS: { [key: string]: LangData } = {
 @Injectable({ providedIn: 'root' })
 export class I18NService implements AlainI18NService {
   private _default = DEFAULT;
-  private change$ = new BehaviorSubject<string>(null);
+  private change$ = new BehaviorSubject<string | null>(null);
 
   private _langs = Object.keys(LANGS).map(code => {
     const item = LANGS[code];
@@ -93,7 +93,7 @@ export class I18NService implements AlainI18NService {
   }
 
   get change(): Observable<string> {
-    return this.change$.asObservable().pipe(filter(w => w != null));
+    return this.change$.asObservable().pipe(filter(w => w != null)) as Observable<string>;
   }
 
   use(lang: string): void {
@@ -107,7 +107,7 @@ export class I18NService implements AlainI18NService {
     return this._langs;
   }
   /** 翻译 */
-  fanyi(key: string, interpolateParams?: Object) {
+  fanyi(key: string, interpolateParams?: {}) {
     return this.translate.instant(key, interpolateParams);
   }
   /** 默认语言 */
@@ -116,10 +116,6 @@ export class I18NService implements AlainI18NService {
   }
   /** 当前语言 */
   get currentLang() {
-    return (
-      this.translate.currentLang ||
-      this.translate.getDefaultLang() ||
-      this._default
-    );
+    return this.translate.currentLang || this.translate.getDefaultLang() || this._default;
   }
 }

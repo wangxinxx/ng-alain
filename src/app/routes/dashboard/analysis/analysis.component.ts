@@ -1,9 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  OnInit,
-  ChangeDetectorRef,
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd';
 import { STColumn } from '@delon/abc';
 import { getTimeDistance } from '@delon/util';
@@ -69,7 +64,7 @@ export class DashboardAnalysisComponent implements OnInit {
     this.http.get('/chart').subscribe((res: any) => {
       res.offlineData.forEach((item: any, idx: number) => {
         item.show = idx === 0;
-        item.chart = Object.assign([], res.offlineChartData);
+        item.chart = { ...[], ...res.offlineChartData };
       });
       this.data = res;
       this.loading = false;
@@ -102,10 +97,7 @@ export class DashboardAnalysisComponent implements OnInit {
     return yuan(value);
   }
 
-  saleTabs: any[] = [
-    { key: 'sales', show: true },
-    { key: 'visits' },
-  ];
+  saleTabs: any[] = [{ key: 'sales', show: true }, { key: 'visits' }];
   salesChange(idx: number) {
     if (this.saleTabs[idx].show !== true) {
       this.saleTabs[idx].show = true;
